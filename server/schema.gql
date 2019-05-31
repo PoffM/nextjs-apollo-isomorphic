@@ -5,3 +5,7 @@ type Query {
 type Mutation {
   increment: Int!
 }
+
+type Subscription {
+  onIncrement: Int!
+}
