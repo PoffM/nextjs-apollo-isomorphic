@@ -1,7 +1,7 @@
-import * as express from "express";
-import * as next from "next";
-import { createApolloServer } from "./createApolloServer";
+import express from "express";
 import { createServer } from "http";
+import next from "next";
+import { createApolloServer } from "./createApolloServer";
 
 (async () => {
   const port = 3000;

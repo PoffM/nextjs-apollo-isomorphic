@@ -1,4 +1,5 @@
 import React from "react";
+import { Counter } from "../components/counter";
 import Head from "../components/head";
 import Nav from "../components/nav";
 
@@ -7,13 +8,10 @@ function Home() {
     <div>
       <Head title="Home" />
       <Nav />
-      <h1>Nextjs apollo isomorphic</h1>
+      <h1>Nextjs Apollo Isomorphic</h1>
+      <Counter />
     </div>
   );
 }
-
-Home.getInitialProps = async () => {
-  return {};
-};
 
 export default Home;
