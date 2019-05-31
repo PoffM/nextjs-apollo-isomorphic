@@ -1,21 +1,26 @@
 import * as express from "express";
 import * as next from "next";
+import { createApolloServer } from "./createApolloServer";
 
 (async () => {
   const port = 3000;
   const dev = process.env.NODE_ENV !== "production";
-  const app = next({ dev });
-  const handle = app.getRequestHandler();
+  const nextApp = next({ dev });
+  const handle = nextApp.getRequestHandler();
 
-  await app.prepare();
+  await nextApp.prepare();
 
-  const server = express();
+  const app = express();
 
-  server.get("*", (req, res) => {
+  const apolloServer = createApolloServer();
+
+  apolloServer.applyMiddleware({ app });
+
+  app.get("*", (req, res) => {
     return handle(req, res);
   });
 
-  server.listen(port, () => {
+  app.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });
 })();

@@ -1,0 +1,7 @@
+type Query {
+  count: Int!
+}
+
+type Mutation {
+  increment: Int!
+}
