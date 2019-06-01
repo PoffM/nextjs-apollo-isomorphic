@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Mutation, Query, Subscription } from "react-apollo";
 
 interface ICountQueryResponse {
   count: number;
@@ -11,17 +11,38 @@ const GET_COUNT = gql`
   }
 `;
 
+const ON_INCREMENT = gql`
+  subscription CountSubscription {
+    count: onIncrement
+  }
+`;
+
+const INCREMENT = gql`
+  mutation IncrementMutation {
+    increment
+  }
+`;
+
 export function Counter() {
   return (
-    <Query<ICountQueryResponse> query={GET_COUNT}>
-      {({ data }) => {
-        if (!data) {
-          return null;
-        }
+    <div>
+      <Query<ICountQueryResponse> query={GET_COUNT}>
+        {({ data: initialData }) => (
+          <Subscription<ICountQueryResponse> subscription={ON_INCREMENT}>
+            {({ data: newData }) => {
+              const data = newData || initialData;
+              if (!data) {
+                return null;
+              }
 
-        const { count } = data;
-        return <div>Count: {count}</div>;
-      }}
-    </Query>
+              return <p>Click count: {data.count}</p>;
+            }}
+          </Subscription>
+        )}
+      </Query>
+      <Mutation<{}> mutation={INCREMENT}>
+        {increment => <button onClick={() => increment()}>Increment</button>}
+      </Mutation>
+    </div>
   );
 }

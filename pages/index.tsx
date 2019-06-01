@@ -5,10 +5,14 @@ import Nav from "../components/nav";
 
 function Home() {
   return (
-    <div>
+    <div style={{ maxWidth: "700px", marginLeft: "auto", marginRight: "auto" }}>
       <Head title="Home" />
       <Nav />
-      <h1>Nextjs Apollo Isomorphic</h1>
+      <h1>Live Click Count</h1>
+      <p>
+        This Counter will update immediately when the button is clicked, even if
+        it's clicked from another browser tab.
+      </p>
       <Counter />
     </div>
   );
