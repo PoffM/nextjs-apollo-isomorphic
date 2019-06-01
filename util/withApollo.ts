@@ -10,15 +10,18 @@ import nextWithApollo from "next-with-apollo";
 
 export const withApollo = nextWithApollo(({ initialState }) => {
   let uri: string;
+  let ssl = "";
   if (process.browser) {
-    const host = window.location.host;
-    uri = `${host}/graphql`;
+    uri = `${window.location.host}/graphql`;
+    if (window.location.protocol === "https:") {
+      ssl = "s"
+    }
   } else {
     uri = `localhost:${process.env.PORT}/graphql`;
   }
 
   const httpLink = new HttpLink({
-    uri: `http://${uri}`
+    uri: `http${ssl}://${uri}`
   });
 
   // Setup HTTP and WebSocket links, but only enable WebSocketLink for the browser, not SSR.
@@ -32,7 +35,7 @@ export const withApollo = nextWithApollo(({ initialState }) => {
           );
         },
         new WebSocketLink({
-          uri: `ws://${uri}`,
+          uri: `ws${ssl}://${uri}`,
           options: {
             reconnect: true
           }
