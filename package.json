@@ -1,8 +1,8 @@
 {
-  "name": "create-next-example-app",
+  "name": "nextjs-apollo-isomorphic",
   "scripts": {
     "dev": "nodemon",
-    "build": "next build && tsc --project tsconfig.server.json",
+    "build": "next build && tsc --project tsconfig.server.json && cp server/schema.gql dist/",
     "start": "cross-env NODE_ENV=production node dist/main.js"
   },
   "dependencies": {
