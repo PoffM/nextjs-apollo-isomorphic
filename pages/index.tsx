@@ -11,7 +11,7 @@ function Home() {
       <h1>Live Click Count</h1>
       <p>
         This Counter will update immediately when the button is clicked, even if
-        it's clicked from another browser tab.
+        it's clicked by another user.
       </p>
       <Counter />
     </div>

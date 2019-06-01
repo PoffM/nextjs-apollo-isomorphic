@@ -1,8 +1,14 @@
 import gql from "graphql-tag";
-import { Mutation, Query, Subscription } from "react-apollo";
+import { compose, graphql } from "react-apollo";
 
 interface ICountQueryResponse {
   count: number;
+}
+
+interface ICounterProps {
+  increment?: () => void;
+  initialCount?: number;
+  newCount?: number;
 }
 
 const GET_COUNT = gql`
@@ -23,26 +29,19 @@ const INCREMENT = gql`
   }
 `;
 
-export function Counter() {
-  return (
-    <div>
-      <Query<ICountQueryResponse> query={GET_COUNT}>
-        {({ data: initialData }) => (
-          <Subscription<ICountQueryResponse> subscription={ON_INCREMENT}>
-            {({ data: newData }) => {
-              const data = newData || initialData;
-              if (!data) {
-                return null;
-              }
-
-              return <p>Click count: {data.count}</p>;
-            }}
-          </Subscription>
-        )}
-      </Query>
-      <Mutation<{}> mutation={INCREMENT}>
-        {increment => <button onClick={() => increment()}>Increment</button>}
-      </Mutation>
-    </div>
-  );
-}
+export const Counter = compose(
+  graphql<{}, ICountQueryResponse, {}, ICounterProps>(GET_COUNT, {
+    props: ({ data }) => ({ initialCount: data && data.count })
+  }),
+  graphql<{}, ICountQueryResponse, {}, ICounterProps>(ON_INCREMENT, {
+    props: ({ data }) => ({ newCount: data && data.count })
+  }),
+  graphql<{}, any, {}, ICounterProps>(INCREMENT, {
+    props: ({ mutate }) => ({ increment: mutate })
+  })
+)(({ increment, initialCount, newCount }: ICounterProps) => (
+  <div>
+    <p>Click count: {newCount || initialCount}</p>
+    <button onClick={increment && (() => increment())}>Increment</button>
+  </div>
+));
